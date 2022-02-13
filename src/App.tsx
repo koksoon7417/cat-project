@@ -8,24 +8,30 @@ import {
 import { debounce } from './utils';
 import defaultImage from './assets/defaultImage.svg';
 
+const sortAttrOptions = [
+  { value: 'name', label: 'Name' },
+  { value: 'weight', label: 'Weight' },
+  { value: 'life_span', label: 'Life Span' },
+];
+
 const App = () => {
-  const [breeds, getBreeds] = useState<BreedType[]>([]);
-  const [searchSort, getSearchSort] = useState<string>('name');
-  const [isSorting, getSorting] = useState<Boolean>(false);
+  const [breedsList, setBreedsList] = useState<BreedType[]>([]);
+  const [sortAttr, setSortAttr] = useState<string>(sortAttrOptions[0].value);
+  const [isDescOrder, setDescOrder] = useState<Boolean>(false);
 
   const searchName = (searchResult: string) => {
     if (searchResult.length >= 3) {
-      Services.getBreedsSearch(searchResult).then((resBreeds) => {
-        getBreeds(resBreeds);
+      Services.getBreedsSearch(searchResult).then((breeds) => {
+        setBreedsList(breeds);
 
-        resBreeds.map((breed, index) => {
+        breeds.map((breed, index) => {
           if (breed.reference_image_id) {
             Services.getImagesSearch(breed.reference_image_id).then((image) => {
-              const breedsWithImage = [...resBreeds];
+              const breedsWithImage = [...breeds];
 
               if (image) breedsWithImage[index].images = image;
 
-              getBreeds(breedsWithImage);
+              setBreedsList(breedsWithImage);
             });
           }
           return breed;
@@ -35,9 +41,9 @@ const App = () => {
   }
 
   const sorting = (sortResult: string) => {
-    let sortData = [...breeds];
+    let sortData = [...breedsList];
 
-    if (isSorting) {
+    if (isDescOrder) {
       switch (sortResult) {
         case 'name':
           sortData.sort((a, b) => b.name.localeCompare(a.name));
@@ -55,7 +61,6 @@ const App = () => {
           ));
           break;
         default:
-          sortData.sort((a, b) => b.name.localeCompare(a.name));
       }
     }
     else {
@@ -76,18 +81,11 @@ const App = () => {
           ));
           break;
         default:
-          sortData.sort((a, b) => a.name.localeCompare(b.name));
       }
     }
 
-    getBreeds(sortData);
+    setBreedsList(sortData);
   };
-
-  const selectOptions = [
-    { value: 'name', label: 'Name' },
-    { value: 'weight', label: 'Weight' },
-    { value: 'life_span', label: 'Life Span' },
-  ];
 
   return (
     <div className="App">
@@ -95,6 +93,7 @@ const App = () => {
         Looking for Cat?
       </header>
       <div className="App-body">
+        {/*input-field div*/}
         <input
           className="input-field"
           name="search"
@@ -102,11 +101,12 @@ const App = () => {
           placeholder='Search for a Breed by name'
           onChange={debounce((e) => searchName(e.target.value), 1000)}
         />
+        {/*sorting-attributes div*/}
         <div className="sorting-attributes">
           Sorting Attributes:
-          <select className="select" onChange={(e) => getSearchSort(e.target.value)}>
+          <select className="select" onChange={(e) => setSortAttr(e.target.value)}>
             {
-              selectOptions.map((option) => (
+              sortAttrOptions.map((option) => (
                 <option value={option.value} key={option.value}>
                   {option.label}
                 </option>
@@ -115,20 +115,21 @@ const App = () => {
           </select>
           <input
             type="checkbox"
-            id="getSorting"
-            name="getSorting"
-            onClick={() => getSorting(!isSorting)}
+            id="setDescOrder"
+            name="setDescOrder"
+            onClick={() => setDescOrder(!isDescOrder)}
           />
-          <label htmlFor="getSorting">Descending Order</label>
-          <button onClick={() => sorting(searchSort)}>
+          <label htmlFor="setDescOrder">Descending Order</label>
+          <button onClick={() => sorting(sortAttr)}>
             Sort
           </button>
         </div>
+        {/*listing div*/}
         {
-          breeds.length > 0 ?
+          breedsList.length > 0 ?
             <div className="listing">
               {
-                breeds.map(breed => (
+                breedsList.map(breed => (
                   <div className="listing-content" key={breed.id}>
                     {
                       breed.reference_image_id ?

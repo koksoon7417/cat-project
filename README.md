@@ -1,8 +1,8 @@
-## API Authentication
+# API Authentication
 
 If you don’t have an API Key, just head over to [here](https://thecatapi.com/) and get one for free.
 
-# Getting Started with Create React App
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -45,4 +45,4 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 ## Reference
 
-The cat API [here](https://thecatapi.com/).
+All the APIs are called from [the cat API](https://thecatapi.com/).
