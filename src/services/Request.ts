@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_URL = "https://api.thecatapi.com/v1";
 
-const Request =  async <T>(
+const Request = async <T>(
   url: string,
   params?: any,
 ): Promise<T> => {
@@ -34,7 +34,10 @@ const Request =  async <T>(
           switch (status) {
             case 400:
               console.error(errMessage);
-              break
+              break;
+            case 500:
+              console.error(errMessage);
+              break;
             default:
           }
         }
