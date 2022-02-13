@@ -14,7 +14,7 @@ const App = () => {
   const [isSorting, getSorting] = useState<Boolean>(false);
 
   const searchName = (searchResult: string) => {
-    if (searchResult.length >= 1) {
+    if (searchResult.length >= 3) {
       Services.getBreedsSearch(searchResult).then((resBreeds) => {
         getBreeds(resBreeds);
 
