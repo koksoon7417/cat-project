@@ -1,0 +1,97 @@
+.App {
+  text-align:start;
+}
+
+.App-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  margin-bottom: 1rem;
+}
+
+.App-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-field{
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  width: 25%;
+}
+
+.sorting-attributes > select, input, button {
+  margin-left: 1rem;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+}
+
+.listing {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  grid-auto-rows: minmax(100px, auto);
+}
+
+.listing-content {
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+@media (max-width: 1240px) {
+  .listing {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 940px) {
+  .listing {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 740px) {
+  .listing {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.empty-list {
+  display: flex;
+  align-items: center;
+  min-height: 50vh;
+}
+
+.cat-image {
+  width: 80px;
+  height: 80px;
+}
+
+.lds-dual-ring {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid black;
+  border-color: black transparent black transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
