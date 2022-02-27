@@ -19,24 +19,27 @@ const App = () => {
   const [sortAttr, setSortAttr] = useState<string>(sortAttrOptions[0].value);
   const [isDescOrder, setDescOrder] = useState<Boolean>(false);
 
-  const searchName = (searchResult: string) => {
+  const searchName = async (searchResult: string) => {
     if (searchResult.length >= 3) {
-      Services.getBreedsSearch(searchResult).then((breeds) => {
-        setBreedsList(breeds);
+      const breeds = await Services.getBreedsSearch(searchResult);
+      setBreedsList(breeds);
 
-        breeds.map((breed, index) => {
-          if (breed.reference_image_id) {
-            Services.getImagesSearch(breed.reference_image_id).then((image) => {
-              const breedsWithImage = [...breeds];
-
-              if (image) breedsWithImage[index].images = image;
-
-              setBreedsList(breedsWithImage);
-            });
-          }
-          return breed;
+      const breedImagesPromises = await Promise.all(
+        breeds.map(breed => {
+          if (breed.reference_image_id) return Services.getImagesSearch(breed.reference_image_id);
+          else return Promise.resolve();
         })
-      });
+      );
+
+      breedImagesPromises.forEach((image, index) => {
+        if (image) {
+          const breedsWithImage = [...breeds];
+
+          breedsWithImage[index].images = image;
+
+          setBreedsList(breedsWithImage);
+        }
+      })
     }
   }
 
